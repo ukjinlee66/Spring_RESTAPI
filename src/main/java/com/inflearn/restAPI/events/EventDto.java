@@ -1,41 +1,36 @@
 package com.inflearn.restAPI.events;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Event {
-
-    @Id @GeneratedValue
-    private Integer id;
+public class EventDto {
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String description;
+    @NotNull
     private LocalDateTime beginEnrollmentDateTime;
+    @NotNull
     private LocalDateTime closeEnrollmentDateTime;
+    @NotNull
     private LocalDateTime beginEventDateTime;
+    @NotNull
     private LocalDateTime endEventDateTime;
     private String location; // (optional) 이게 없으면 온라인 모임
+    @Min(0)
     private int basePrice; // (optional)
+    @Min(0)
     private int maxPrice; // (optional)
+    @Min(0)
     private int limitOfEnrollment;
-    private boolean offline;
-    private boolean free;
-    @Enumerated(EnumType.STRING)
-    private EventStatus eventStatus = EventStatus.DRAFT;
 }
