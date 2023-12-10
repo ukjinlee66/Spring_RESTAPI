@@ -33,6 +33,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//modelmapper
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.0'
+	// https://mvnrepository.com/artifact/pl.pragmatists/JUnitParams
+	testImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.1.1'
 	testImplementation 'junit:junit:4.13.1'
 	compileOnly 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'

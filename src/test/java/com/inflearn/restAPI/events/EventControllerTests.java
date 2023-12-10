@@ -8,11 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,10 +56,15 @@ public class EventControllerTests {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("id").exists())
             .andExpect(header().exists(HttpHeaders.LOCATION))
-            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-            .andExpect(jsonPath("id").value(Matchers.not(100)))
-            .andExpect(jsonPath("free").value(Matchers.not(true)))
-            .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
+            .andExpect(
+                header().string(HttpHeaders.CONTENT_TYPE, "application/hal+json;charset=UTF-8"))
+            .andExpect(jsonPath("free").value(false))
+            .andExpect(jsonPath("offline").value(true))
+            .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
+            .andExpect(jsonPath("_links.self").exists())
+            .andExpect(jsonPath("_links.query-events").exists())
+            .andExpect(jsonPath("_links.update-event").exists())
+        ;
 
     }
 
@@ -85,8 +88,8 @@ public class EventControllerTests {
             .build();
 
         mockMvc.perform(post("/api/events")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaTypes.HAL_JSON)
+                .contentType("application/json;charset=UTF-8")
+                .accept("application/hal+json;charset=UTF-8")
                 .content(objectMapper.writeValueAsString(event)))
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -124,6 +127,11 @@ public class EventControllerTests {
         this.mockMvc.perform(post("/api/events")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(eventDto)))
-            .andExpect(status().isBadRequest());
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$[0].objectName").exists())
+            .andExpect(jsonPath("$[0].defaultMessage").exists())
+            .andExpect(jsonPath("$[0].code").exists())
+        ;
     }
 }

@@ -9,15 +9,19 @@ public class EventValidator {
 
     public void validate(EventDto eventDto, Errors errors) {
         // TODO 입력 받은 이벤트 데이터가 유효한지 검사하는 로직 구현
-         if (eventDto.getMaxPrice() < eventDto.getBasePrice() && eventDto.getMaxPrice() > 0) {
-                errors.rejectValue("basePrice", "wrongValue", "BasePrice is wrong.");
-                errors.rejectValue("maxPrice", "wrongValue", "MaxPrice is wrong.");
-         }
+        if (eventDto.getMaxPrice() < eventDto.getBasePrice() && eventDto.getMaxPrice() > 0) {
+            //FieldError
+//            errors.rejectValue("basePrice", "wrongValue", "BasePrice is wrong.");
+//            errors.rejectValue("maxPrice", "wrongValue", "MaxPrice is wrong.");
+
+            //GlobalError
+            errors.reject("wrongPrices", "Values for prices are wrong.");
+        }
         LocalDateTime endEventDateTime = eventDto.getEndEventDateTime();
-         if (endEventDateTime.isBefore(eventDto.getBeginEventDateTime()) ||
-         endEventDateTime.isBefore(eventDto.getCloseEnrollmentDateTime()) ||
-             endEventDateTime.isBefore(eventDto.getBeginEnrollmentDateTime())) {
-             errors.rejectValue("endEventDateTime", "wrongValue", "endEventDateTime is wrong.");
-         }
+        if (endEventDateTime.isBefore(eventDto.getBeginEventDateTime()) ||
+            endEventDateTime.isBefore(eventDto.getCloseEnrollmentDateTime()) ||
+            endEventDateTime.isBefore(eventDto.getBeginEnrollmentDateTime())) {
+            errors.rejectValue("endEventDateTime", "wrongValue", "endEventDateTime is wrong.");
+        }
     }
 }
