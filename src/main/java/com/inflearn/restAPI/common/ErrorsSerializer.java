@@ -14,6 +14,8 @@ public class ErrorsSerializer extends JsonSerializer<Errors> {
     @Override
     public void serialize(Errors errors, JsonGenerator gen, SerializerProvider serializers)
         throws IOException {
+        // FieldName 추가시 jackson이 Array형식으로 생성한다.
+        gen.writeFieldName("errors");
         gen.writeStartArray();
         errors.getFieldErrors().forEach(e -> {
             try {

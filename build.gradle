@@ -13,6 +13,7 @@ java {
 }
 
 configurations {
+	asciidoctorExts
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -42,6 +43,37 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	// ascii 관련 추가
+	asciidoctorExts 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+	// mapstruct
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+	annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+	annotationProcessor(
+			'org.projectlombok:lombok',
+			'org.projectlombok:lombok-mapstruct-binding:0.1.0'
+	)
+}
+
+test {
+	useJUnitPlatform()
+	outputs.dir snippetsDir
+}
+
+asciidoctor {
+	inputs.dir snippetsDir
+	configurations 'asciidoctorExt'
+	dependsOn test
+}
+
+bootJar {
+	dependsOn asciidoctor
+
+	// build 경로 안에 있는 index.html을 밖으로 꺼내준다.
+	copy {
+		from "${asciidoctor.outputDir}"
+		into "src/main/resources/static/docs"   // src/main/resources/static/docs로 복사
+	}
 }
 
 tasks.named('test') {
