@@ -1,10 +1,12 @@
 package com.inflearn.restAPI.events;
 
+import com.inflearn.restAPI.accounts.Account;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +40,9 @@ public class Event {
     private boolean free;
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
+
+    @ManyToOne
+    private Account manager;
 
     public void update() {
         // Update free

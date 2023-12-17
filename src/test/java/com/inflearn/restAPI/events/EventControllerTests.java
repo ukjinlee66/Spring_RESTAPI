@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.inflearn.restAPI.Application;
 import com.inflearn.restAPI.common.BaseControllerTest;
 import com.inflearn.restAPI.mapper.EventMapper;
 import java.time.LocalDateTime;
@@ -32,11 +33,11 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
-
 
 public class EventControllerTests extends BaseControllerTest {
 
@@ -117,8 +118,7 @@ public class EventControllerTests extends BaseControllerTest {
                     fieldWithPath("basePrice").description("base price of new event"),
                     fieldWithPath("maxPrice").description("max price of new event"),
                     fieldWithPath("limitOfEnrollment").description("limit of enrollment")
-
-                ),
+                    ),
                 responseHeaders(
                     headerWithName(HttpHeaders.LOCATION).description("Location header"),
                     headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
@@ -147,7 +147,8 @@ public class EventControllerTests extends BaseControllerTest {
                         "link to query event list"),
                     fieldWithPath("_links.update-event.href").description(
                         "link to update existing event"),
-                    fieldWithPath("_links.profile.href").description("link to profile")
+                    fieldWithPath("_links.profile.href").description("link to profile"),
+                    fieldWithPath("manager").description("manager")
                 )))
         ;
 
